@@ -9,15 +9,14 @@ logger=logging.getLogger(__name__)
 logger.info("success")
 # Create your views here.
 class DonationFormView(FormView):
-    template_name = 'donate_form.html'
+    template_name = 'donationApp/donate_form.html'
     form_class = DonorDetailsForm
     logger.info("form view success")
     def get_form_kwargs(self):
         logger.info('called get form kwargs')
         kwargs=super(DonationFormView,self).get_form_kwargs()
-        request=kwargs.pop('request')
         try:
-            user=UserModel.objects.get(email=request.user.email)
+            user=UserModel.objects.get(email=self.request.user.email)
             kwargs['user']=user
         except:
             #object does not exist
