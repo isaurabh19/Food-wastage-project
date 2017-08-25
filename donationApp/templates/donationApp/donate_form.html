@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Donate</title>
+</head>
+<body>
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+<form method="post">
+    {{csrf_token}}
+    {{form.as_ul}}
+    {{food_formset.management_form}}
+    {% for fooditem_form in food_formset%}
+        <div>
+            {{fooditem_form.as_ul}
+        </div>
+</form>
+</body>
+</html>
