@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load staticfiles %}
     <meta charset="UTF-8">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{% static 'donationApp/jquery.formset.js' %}"></script>
     <title>Donate</title>
 </head>
 <body>
@@ -10,27 +13,38 @@
     {% csrf_token %}
     {{form.as_ul}}
     {{food_formset.management_form}}
-    {% for fooditem_form in food_formset %}
-        <div>
-            <label>Name</label>
-            {{ fooditem_form.food_name }}
-            {% if fooditem_form.food_name.errors %}
-                {% for error in fooditem_form.food_name.errors %}
-                    {{ error|escape }}
-                {% endfor %}
-            {% endif %}
+            {% for fooditem_form in food_formset %}
+            <div class="food-formset">
+                {{ fooditem_form.food_name }}
+                {% if fooditem_form.food_name.errors %}
+                    {% for error in fooditem_form.food_name.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
 
-        </div>
-        <div>
-            <label>Quantity</label>
-            {{ fooditem_form.food_quantity }}
-            {% if fooditem_form.food_quantity.errors %}
-                {% for error in fooditem_form.food_quantity.errors %}
-                    {{ error|escape }}
-                {% endfor %}
-            {% endif %}
-        </div>
-    {% endfor %}
+                {{ fooditem_form.food_quantity }}
+                {% if fooditem_form.food_quantity.errors %}
+                    {% for error in fooditem_form.food_quantity.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+
+    <br>
+    <br>
+    <br>
+
+    <div>
+        <input type="submit" value="Make Donation" class="button"/>
+    </div>
 </form>
+
+<script>
+    $('.food-formset').formset({
+        addText: 'add link',
+        deleteText: 'remove'
+    });
+</script>
 </body>
 </html>

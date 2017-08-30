@@ -1,13 +1,15 @@
 from django import forms
+from djangoformsetjs.utils import formset_media_js
 
 class FoodItemForm(forms.Form):
     """
     Form for individual food item-quantity association
     """
+
     food_name=forms.CharField(
         max_length=100,
         widget=forms.TextInput(attrs={
-            'placeholder':'Type of Food'
+            'title':'Type of Food'
         }),
         required=True,
         help_text='e.g: Rice, Roti, Raita etc.'
@@ -16,7 +18,7 @@ class FoodItemForm(forms.Form):
     food_quantity= forms.IntegerField(
         min_value=1,
         widget=forms.NumberInput(attrs={
-            'placeholder':'Quanity of Food'
+            'title':'Quanity of Food'
         }),
         required=True,
         help_text='(kg/no of bowls/numbers)'
@@ -32,7 +34,7 @@ class DonorDetailsForm(forms.Form):
         self.fields['donor_name']=forms.CharField(
             max_length=100,
             widget=forms.TextInput(attrs={
-                'placeholder':'Name'
+                'title':'Name'
             }),
             initial=self.user.name,
             required=True
@@ -41,17 +43,13 @@ class DonorDetailsForm(forms.Form):
         self.fields['donor_address']=forms.CharField(
             max_length=1000,
             widget=forms.Textarea(attrs={
-                'placeholder':'Address to collect donation'
+                'title':'Address to collect donation'
             }),
             initial=self.user.address,
             required=True
         )
 
-        self.fields['donor_email']=forms.EmailField(max_length=100,widget=forms.EmailInput(attrs={
-            'placeholder':'Email'
-        }),initial=self.user.email, required=True)
-
         self.fields['donor_contact']=forms.IntegerField(widget=forms.NumberInput(attrs={
-            'placeholder':'Contact No'
+            'title':'Contact No'
         }),initial=self.user.contact_no,required=True)
 

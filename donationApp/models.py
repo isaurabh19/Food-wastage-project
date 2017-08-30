@@ -14,11 +14,14 @@ class UserModel(models.Model):
         return self.email
 
 class DonationModel(models.Model):
-    donor=models.ForeignKey(UserModel,related_name='donor')
+    donor=models.CharField(max_length=100)
     donor_address=models.TextField()
+    donor_email= models.EmailField(default='sample@sample.com')
+    donor_contact=models.IntegerField(default=00)
     donation_items=jsonfield.JSONField()
-    receiver=models.ForeignKey(UserModel,related_name='receiver')
+    receiver=models.CharField(max_length=100)
     receiver_address=models.TextField()
+    receiver_email=models.EmailField(default='sample@sample.com')
     created_at=models.DateTimeField(auto_now_add=True)
 
 

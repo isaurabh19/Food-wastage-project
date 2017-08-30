@@ -1,9 +1,9 @@
 from django.forms.formsets import formset_factory
 from django.views.generic.edit import CreateView,FormView
-from .models import UserModel
+from .models import UserModel, DonationModel
 from forms import DonorDetailsForm,FoodItemForm
 import logging
-
+import json
 logging.basicConfig(level=logging.INFO)
 logger=logging.getLogger(__name__)
 logger.info("success")
@@ -12,6 +12,8 @@ class DonationFormView(FormView):
     template_name = 'donationApp/donate_form.html'
     form_class = DonorDetailsForm
     logger.info("form view success")
+    success_url = '/thanks/'
+
     def get_form_kwargs(self):
         logger.info('called get form kwargs')
         kwargs=super(DonationFormView,self).get_form_kwargs()
@@ -28,10 +30,31 @@ class DonationFormView(FormView):
         context=super(DonationFormView,self).get_context_data()
         form=self.get_form(self.form_class)
         context['form']=form
-        FoodItemFormset=formset_factory(FoodItemForm,extra=1)
+        FoodItemFormset=formset_factory(FoodItemForm,extra=1, can_delete=True)
         food_formset=FoodItemFormset()
         context['food_formset']=food_formset
         return context
 
     def post(self, request, *args, **kwargs):
-        pass
+        user = UserModel.objects.get(email=request.user.email)
+        donation=DonationModel()
+        donor_form= DonorDetailsForm(request.POST,user=user)
+        FoodItemFormset=formset_factory(FoodItemForm)
+        fooditem_formset=FoodItemFormset(request.POST)
+
+        if donor_form.is_valid() and fooditem_formset.is_valid():
+            donation.donor=donor_form.cleaned_data.get('donor_name')
+            donation.donor_address=donor_form.cleaned_data.get('donor_address')
+            donation.donor_email=user.email
+            donation.donor_contact=donor_form.cleaned_data.get('donor_contact')
+
+            food_items={}
+            for forms in fooditem_formset:
+                food_items[forms.cleaned_data.get('food_name')]=forms.cleaned_data.get('food_quantity')
+
+            donation.donation_items=json.dumps(food_items)
+            donation.save()
+
+            return self.form_valid(donor_form)
+
+
