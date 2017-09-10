@@ -19,6 +19,17 @@ class DonationDetailView(DetailView):
     model = DonationModel
     template_name = 'donationApp/donation_detail.html'
 
+    # def get_context_data(self, **kwargs):
+    #     context=super(DonationDetailView,self).get_context_data(**kwargs)
+    #     self.object=self.get_object()
+    #     self.object.donation_items=json.loads(self.object.donation_items)
+    #     logger.info(self.object.donation_items.items())
+    #     # for k,v in self.object.donation_items.items():
+    #     #     logger.info(k,v)
+    #
+    #     return context
+
+
 class DonationFormView(FormView):
     template_name = 'donationApp/donate_form.html'
     form_class = DonorDetailsForm
@@ -63,7 +74,7 @@ class DonationFormView(FormView):
             for forms in fooditem_formset:
                 food_items[forms.cleaned_data.get('food_name')]=forms.cleaned_data.get('food_quantity')
 
-            donation.donation_items=json.dumps(food_items)
+            donation.donation_items=food_items
             donation.save()
 
             return self.form_valid(donor_form)
