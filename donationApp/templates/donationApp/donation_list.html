@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Donations</title>
+</head>
+<body>
+    <p>Live Donations</p>
+    <ul>
+        {% for donation in object_list %}
+            <li>
+                <div>
+                    <h1>ID: {{donation.id}} </h1>
+                    <p>Donor: {{ donation.donor}}</p>
+                    <p>Address: {{donation.donor_address}}</p>
+                    <p>Contact No: {{donation.donor_contact}}</p>
+                    <a href="{% url 'detail-donations' donation.id %}">More</a>
+                </div>
+
+            </li>
+        {%endfor%}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>More Details</title>
+</head>
+<body>
+<p>Donor: {{ object.donor}}</p>
+<p>Address: {{object.donor_address}}</p>
+<p>Contact No: {{object.donor_contact}}</p>
+<h1>Items:</h1>
+{{object.donation_items}}
+<table>
+    {% for food,quantity in object.donation_items.items %}
+        <tr>
+            <td>{{items}}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

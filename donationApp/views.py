@@ -1,13 +1,24 @@
 from django.forms.formsets import formset_factory
-from django.views.generic.edit import CreateView,FormView
+from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from .models import UserModel, DonationModel
 from forms import DonorDetailsForm,FoodItemForm
 import logging
 import json
+
 logging.basicConfig(level=logging.INFO)
 logger=logging.getLogger(__name__)
 logger.info("success")
 # Create your views here.
+class DonationListView(ListView):
+    queryset = DonationModel.objects.filter(receiver='')
+    template_name = 'donationApp/donation_list.html'
+
+class DonationDetailView(DetailView):
+    model = DonationModel
+    template_name = 'donationApp/donation_detail.html'
+
 class DonationFormView(FormView):
     template_name = 'donationApp/donate_form.html'
     form_class = DonorDetailsForm

@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import datetime
+from django.urls import reverse
 from django.db import models
 import jsonfield
 
@@ -16,12 +17,13 @@ class UserModel(models.Model):
 class DonationModel(models.Model):
     donor=models.CharField(max_length=100)
     donor_address=models.TextField()
-    donor_email= models.EmailField(default='sample@sample.com')
+    donor_email= models.EmailField()
     donor_contact=models.IntegerField(default=00)
     donation_items=jsonfield.JSONField()
     receiver=models.CharField(max_length=100)
     receiver_address=models.TextField()
-    receiver_email=models.EmailField(default='sample@sample.com')
+    receiver_email=models.EmailField()
     created_at=models.DateTimeField(auto_now_add=True)
+
 
 
