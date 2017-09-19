@@ -25,5 +25,8 @@ class DonationModel(models.Model):
     receiver_email=models.EmailField()
     created_at=models.DateTimeField(auto_now_add=True)
 
+    def get_absolute_url(self):
+        return reverse('detail-donations',args=[str(self.id)])
+
 
 

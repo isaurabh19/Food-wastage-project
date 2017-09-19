@@ -5,11 +5,11 @@ from django.views.generic.detail import DetailView
 from .models import UserModel, DonationModel
 from forms import DonorDetailsForm,FoodItemForm
 import logging
-import json
+
 
 logging.basicConfig(level=logging.INFO)
 logger=logging.getLogger(__name__)
-logger.info("success")
+
 # Create your views here.
 class DonationListView(ListView):
     queryset = DonationModel.objects.filter(receiver='')
@@ -19,21 +19,9 @@ class DonationDetailView(DetailView):
     model = DonationModel
     template_name = 'donationApp/donation_detail.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context=super(DonationDetailView,self).get_context_data(**kwargs)
-    #     self.object=self.get_object()
-    #     self.object.donation_items=json.loads(self.object.donation_items)
-    #     logger.info(self.object.donation_items.items())
-    #     # for k,v in self.object.donation_items.items():
-    #     #     logger.info(k,v)
-    #
-    #     return context
-
-
 class DonationFormView(FormView):
     template_name = 'donationApp/donate_form.html'
     form_class = DonorDetailsForm
-    logger.info("form view success")
     success_url = '/thanks/'
 
     def get_form_kwargs(self):
