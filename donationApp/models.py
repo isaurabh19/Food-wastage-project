@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
-import datetime
-from django.urls import reverse
-from django.db import models
+
 import jsonfield
+from django.db import models
+from django.urls import reverse
 
 
 class UserModel(models.Model):
@@ -10,6 +10,7 @@ class UserModel(models.Model):
     address=models.TextField()
     email=models.EmailField(primary_key=True)
     contact_no=models.PositiveIntegerField()
+    user_type=models.CharField(max_length=10,default='receiver')
 
     def __str__(self):
         return self.email

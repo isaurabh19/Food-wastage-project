@@ -1,11 +1,13 @@
-from django.forms.formsets import formset_factory
-from django.views.generic.edit import FormView
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from .models import UserModel, DonationModel
-from forms import DonorDetailsForm,FoodItemForm
 import logging
 
+from django.core.mail import EmailMessage
+from django.forms.formsets import formset_factory
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
+
+from forms import DonorDetailsForm, FoodItemForm
+from .models import UserModel, DonationModel
 
 logging.basicConfig(level=logging.INFO)
 logger=logging.getLogger(__name__)
@@ -47,6 +49,7 @@ class DonationFormView(FormView):
 
     def post(self, request, *args, **kwargs):
         user = UserModel.objects.get(email=request.user.email)
+        logger.info(user)
         donation=DonationModel()
         donor_form= DonorDetailsForm(request.POST,user=user)
         FoodItemFormset=formset_factory(FoodItemForm)
@@ -66,5 +69,11 @@ class DonationFormView(FormView):
             donation.save()
 
             return self.form_valid(donor_form)
+
+    def form_valid(self, form):
+        e=EmailMessage()
+        e.subject="New Donation Made!"
+
+        return self.get_success_url()
 
 

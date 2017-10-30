@@ -1,5 +1,5 @@
 from django import forms
-from djangoformsetjs.utils import formset_media_js
+
 
 class FoodItemForm(forms.Form):
     """
