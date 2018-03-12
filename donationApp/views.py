@@ -68,12 +68,14 @@ class DonationFormView(FormView):
             donation.donation_items=food_items
             donation.save()
 
-            return self.form_valid(donor_form)
+            return self.form_valid(donor_form,donation)
 
-    def form_valid(self, form):
+    def form_valid(self, form,donation_object):
         e=EmailMessage()
         e.subject="New Donation Made!"
-
-        return self.get_success_url()
+        e.body="View the detailed donation from {} here: {}".format(form.donor,donation_object.get_absolute_url())
+        e.to=UserModel.objects.filter(user_type='receiver')
+        e.send()
+        return super(DonationFormView, self).form_valid(form)
 
 
