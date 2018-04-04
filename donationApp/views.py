@@ -5,8 +5,8 @@ from django.forms.formsets import formset_factory
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-
-from forms import DonorDetailsForm, FoodItemForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from forms import DonorDetailsForm, FoodItemForm, SignUpForm
 from .models import UserModel, DonationModel
 
 logging.basicConfig(level=logging.INFO)
@@ -17,9 +17,15 @@ class DonationListView(ListView):
     queryset = DonationModel.objects.filter(receiver='')
     template_name = 'donationApp/donation_list.html'
 
-class DonationDetailView(DetailView):
+class DonationDetailView(LoginRequiredMixin,DetailView):
     model = DonationModel
     template_name = 'donationApp/donation_detail.html'
+    login_url='/login/'
+
+class SignUpFormView(FormView):
+    template_name = 'donationApp/signup.html'
+    form_class = SignUpForm
+
 
 class DonationFormView(FormView):
     template_name = 'donationApp/donate_form.html'

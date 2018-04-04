@@ -1,6 +1,6 @@
 from django import forms
-
-
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUserAuthModel
 class FoodItemForm(forms.Form):
     """
     Form for individual food item-quantity association
@@ -53,3 +53,24 @@ class DonorDetailsForm(forms.Form):
             'title':'Contact No'
         }),initial=self.user.contact_no,required=True)
 
+class SignUpForm(UserCreationForm):
+    #email=forms.EmailField(widget=forms.EmailInput)
+    name= forms.CharField(widget=forms.TextInput)
+    address=forms.CharField(widget=forms.TextInput)
+    contact_no=forms.IntegerField(widget=forms.NumberInput)
+    user_type=forms.CharField(widget=forms.TextInput)
+
+    class Meta:
+        model= CustomUserAuthModel
+        fields=('email','name','address','contact_no','user_type')
+
+
+    def save(self, commit=True):
+        user=super(SignUpForm,self).save(commit=False)
+        user.name=self.cleaned_data['name']
+        user.address=self.cleaned_data['address']
+        user.contact=self.cleaned_data['contact_no']
+        user.user_type=self.cleaned_data['user_type']
+        if commit:
+            user.save()
+        return user

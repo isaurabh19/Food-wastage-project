@@ -26,7 +26,7 @@ SECRET_KEY = 'hrn$t@8=84*7fq=e=a68#4i(9$xq7=g8p!jow*td#t)d=s^g5x'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL='donationApp.CustomUserAuthModel'
 ELASTICSEARCH_AUTO_INDEX=True
 # Application definition
 
@@ -52,7 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'mywebapps.urls'
-
+LOGIN_URL='/login/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
