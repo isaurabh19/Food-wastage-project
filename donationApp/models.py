@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import jsonfield
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.conf import settings
 
 class UserModel(models.Model):
@@ -57,7 +57,7 @@ class CustomAuthUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class CustomUserAuthModel(AbstractUser):
+class CustomUserAuthModel(AbstractBaseUser):
     email=models.EmailField(unique=True, max_length=255)
     name = models.CharField(max_length=100)
     address = models.TextField()
@@ -67,7 +67,7 @@ class CustomUserAuthModel(AbstractUser):
     #staff = models.BooleanField(default=False)  # a admin user; non super-user
     admin = models.BooleanField(default=False)  # a superuser
     USERNAME_FIELD='email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['name','address','contact_no','user_type']
     objects = CustomAuthUserManager()
 
     def get_full_name(self):

@@ -55,10 +55,10 @@ class DonorDetailsForm(forms.Form):
 
 class SignUpForm(UserCreationForm):
     #email=forms.EmailField(widget=forms.EmailInput)
-    name= forms.CharField(widget=forms.TextInput)
-    address=forms.CharField(widget=forms.TextInput)
-    contact_no=forms.IntegerField(widget=forms.NumberInput)
-    user_type=forms.CharField(widget=forms.TextInput)
+    # name= forms.CharField(widget=forms.TextInput)
+    # address=forms.CharField(widget=forms.TextInput)
+    # contact_no=forms.IntegerField(widget=forms.NumberInput)
+    # user_type=forms.CharField(widget=forms.TextInput)
 
     class Meta:
         model= CustomUserAuthModel

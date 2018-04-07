@@ -8,7 +8,7 @@ from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from forms import DonorDetailsForm, FoodItemForm, SignUpForm
 from .models import UserModel, DonationModel
-
+from django.contrib.auth import authenticate,login
 logging.basicConfig(level=logging.INFO)
 logger=logging.getLogger(__name__)
 
@@ -25,13 +25,31 @@ class DonationDetailView(LoginRequiredMixin,DetailView):
 class SignUpFormView(FormView):
     template_name = 'donationApp/signup.html'
     form_class = SignUpForm
+    success_url = '/thanks/'
+
+    def post(self, request, *args, **kwargs):
+        form=SignUpForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            # #user.username=form.cleaned_data['email']
+            # user.name = form.cleaned_data['name']
+            # user.address=form.cleaned_data['address']
+            # user.contact=form.cleaned_data['contact_no']
+            # user.user_type=form.cleaned_data['user_type']
+            # user.save()
+
+            username=user.email
+            password=user.password1
+            u=authenticate(request,username=username,password=password)
+            login(request,u)
+        return self.form_valid(form)
 
 
 class DonationFormView(FormView):
     template_name = 'donationApp/donate_form.html'
     form_class = DonorDetailsForm
     success_url = '/thanks/'
-
+#TODO CHANGE USERMODEL WITH CUSTOMUSERAUTHMODEL
     def get_form_kwargs(self):
         logger.info('called get form kwargs')
         kwargs=super(DonationFormView,self).get_form_kwargs()
