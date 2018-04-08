@@ -1,6 +1,11 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUserAuthModel
+from .models import UserModel
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger=logging.getLogger(__name__)
+
 class FoodItemForm(forms.Form):
     """
     Form for individual food item-quantity association
@@ -54,15 +59,10 @@ class DonorDetailsForm(forms.Form):
         }),initial=self.user.contact_no,required=True)
 
 class SignUpForm(UserCreationForm):
-    #email=forms.EmailField(widget=forms.EmailInput)
-    # name= forms.CharField(widget=forms.TextInput)
-    # address=forms.CharField(widget=forms.TextInput)
-    # contact_no=forms.IntegerField(widget=forms.NumberInput)
-    # user_type=forms.CharField(widget=forms.TextInput)
 
     class Meta:
-        model= CustomUserAuthModel
-        fields=('email','name','address','contact_no','user_type')
+        model= UserModel
+        fields=('email','name','address','contact_no','is_receiver','password1','password2')
 
 
     def save(self, commit=True):
@@ -70,7 +70,8 @@ class SignUpForm(UserCreationForm):
         user.name=self.cleaned_data['name']
         user.address=self.cleaned_data['address']
         user.contact=self.cleaned_data['contact_no']
-        user.user_type=self.cleaned_data['user_type']
+        user.is_receiver=self.cleaned_data['is_receiver']
+        logger.info(user)
         if commit:
             user.save()
         return user

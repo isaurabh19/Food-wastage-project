@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from forms import DonorDetailsForm, FoodItemForm, SignUpForm
 from .models import UserModel, DonationModel
 from django.contrib.auth import authenticate,login
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger=logging.getLogger(__name__)
 
 # Create your views here.
@@ -29,20 +29,18 @@ class SignUpFormView(FormView):
 
     def post(self, request, *args, **kwargs):
         form=SignUpForm(request.POST)
+        logger.debug("here in post of form")
         if form.is_valid():
-            user=form.save(commit=False)
-            # #user.username=form.cleaned_data['email']
-            # user.name = form.cleaned_data['name']
-            # user.address=form.cleaned_data['address']
-            # user.contact=form.cleaned_data['contact_no']
-            # user.user_type=form.cleaned_data['user_type']
-            # user.save()
-
-            username=user.email
-            password=user.password1
+            form.save()
+            #logger.info(user.email+'signed up')
+            username=form.cleaned_data['email']
+            password=form.cleaned_data['password1']
             u=authenticate(request,username=username,password=password)
             login(request,u)
-        return self.form_valid(form)
+            return self.form_valid(form)
+        else:
+            logger.info(form)
+            return self.form_invalid(form)
 
 
 class DonationFormView(FormView):
@@ -54,7 +52,7 @@ class DonationFormView(FormView):
         logger.info('called get form kwargs')
         kwargs=super(DonationFormView,self).get_form_kwargs()
         try:
-            user=UserModel.objects.get(email=self.request.user.email)
+            user=self.request.user
             kwargs['user']=user
         except:
             #object does not exist
@@ -98,7 +96,7 @@ class DonationFormView(FormView):
         e=EmailMessage()
         e.subject="New Donation Made!"
         e.body="View the detailed donation from {} here: {}".format(form.donor,donation_object.get_absolute_url())
-        e.to=UserModel.objects.filter(user_type='receiver')
+        e.to=UserModel.objects.filter(is_receiver=True)
         e.send()
         return super(DonationFormView, self).form_valid(form)
 

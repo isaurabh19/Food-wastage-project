@@ -6,17 +6,8 @@ from django.urls import reverse
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.conf import settings
 
-class UserModel(models.Model):
-    name=models.CharField(max_length=100)
-    address=models.TextField()
-    email=models.EmailField(primary_key=True)
-    contact_no=models.PositiveIntegerField()
-    user_type=models.CharField(max_length=10,default='receiver')
 
-    def __str__(self):
-        return self.email
-
-class CustomAuthUserManager(BaseUserManager):
+class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
         Creates and saves a User with the given email and password.
@@ -57,18 +48,18 @@ class CustomAuthUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class CustomUserAuthModel(AbstractBaseUser):
+class UserModel(AbstractBaseUser):
     email=models.EmailField(unique=True, max_length=255)
     name = models.CharField(max_length=100)
     address = models.TextField()
     contact_no = models.CharField(max_length=10)
-    user_type = models.CharField(max_length=10, default='receiver')
+    is_receiver = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     #staff = models.BooleanField(default=False)  # a admin user; non super-user
     admin = models.BooleanField(default=False)  # a superuser
     USERNAME_FIELD='email'
-    REQUIRED_FIELDS = ['name','address','contact_no','user_type']
-    objects = CustomAuthUserManager()
+    REQUIRED_FIELDS = ['name','address','contact_no','is_receiver']
+    objects = UserManager()
 
     def get_full_name(self):
         # The user is identified by their email address
@@ -76,9 +67,6 @@ class CustomUserAuthModel(AbstractBaseUser):
 
     def get_short_name(self):
         # The user is identified by their email address
-        return self.email
-
-    def __str__(self):  # __unicode__ on Python 2
         return self.email
 
     def has_perm(self, perm, obj=None):
