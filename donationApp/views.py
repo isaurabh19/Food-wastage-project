@@ -1,6 +1,6 @@
 import logging
 
-from django.core.mail import EmailMessage
+from emails import send_email
 from django.forms.formsets import formset_factory
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
@@ -89,15 +89,9 @@ class DonationFormView(FormView):
 
             donation.donation_items=food_items
             donation.save()
-
-            return self.form_valid(donor_form,donation)
-
-    def form_valid(self, form,donation_object):
-        e=EmailMessage()
-        e.subject="New Donation Made!"
-        e.body="View the detailed donation from {} here: {}".format(form.donor,donation_object.get_absolute_url())
-        e.to=UserModel.objects.filter(is_receiver=True)
-        e.send()
-        return super(DonationFormView, self).form_valid(form)
+            body="View the detailed donation from {} here: {}".format(donor_form.donor, donation.get_absolute_url())
+            to=UserModel.objects.filter(is_receiver=True)
+            send_email(subject="New Donation Made!",body=body,to=to)
+            return self.form_valid(donor_form)
 
 

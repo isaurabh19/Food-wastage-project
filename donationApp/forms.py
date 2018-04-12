@@ -58,6 +58,8 @@ class DonorDetailsForm(forms.Form):
             'title':'Contact No'
         }),initial=self.user.contact_no,required=True)
 
+        self.fields['donor_email']=forms.EmailField(widget=forms.EmailInput(),initial=self.user.email)
+
 class SignUpForm(UserCreationForm):
 
     class Meta:

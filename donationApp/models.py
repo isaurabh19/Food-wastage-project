@@ -35,7 +35,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, password,name,address,contact_no,is_receiver):
         """
         Creates and saves a superuser with the given email and password.
         """
@@ -43,6 +43,10 @@ class UserManager(BaseUserManager):
             email,
             password=password,
         )
+        user.name = name
+        user.address = address
+        user.contact_no = contact_no
+        user.is_receiver = is_receiver
         user.staff = True
         user.admin = True
         user.save(using=self._db)
@@ -55,7 +59,7 @@ class UserModel(AbstractBaseUser):
     contact_no = models.CharField(max_length=10)
     is_receiver = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
-    #staff = models.BooleanField(default=False)  # a admin user; non super-user
+    staff = models.BooleanField(default=False)  # a admin user; non super-user
     admin = models.BooleanField(default=False)  # a superuser
     USERNAME_FIELD='email'
     REQUIRED_FIELDS = ['name','address','contact_no','is_receiver']
