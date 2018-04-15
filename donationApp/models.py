@@ -106,13 +106,9 @@ class DonationModel(models.Model):
     donor_contact=models.IntegerField(default=00)
     donation_items=jsonfield.JSONField()
     receiver=models.CharField(max_length=100)
-    receiver_address=models.TextField()
+    receiver_contact=models.IntegerField(default=00)
     receiver_email=models.EmailField()
     created_at=models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
         return reverse('detail-donations',args=[str(self.id)])
-
-
-
-
