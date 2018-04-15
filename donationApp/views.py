@@ -10,7 +10,7 @@ from forms import DonorDetailsForm, FoodItemForm, SignUpForm
 from .models import UserModel, DonationModel
 from django.contrib.auth import authenticate,login
 from django.shortcuts import render
-
+from django.urls import reverse
 logging.basicConfig(level=logging.DEBUG)
 logger=logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class DonationListView(ListView):
 class DonationDetailView(LoginRequiredMixin,DetailView):
     model = DonationModel
     template_name = 'donationApp/donation_detail.html'
-    login_url='/login/'
+    login_url= '/login'#reverse('login')
 
     def post(self,request,*args,**kwargs):
         object=self.get_object()
@@ -61,11 +61,12 @@ class SignUpFormView(FormView):
             logger.info(form)
             return self.form_invalid(form)
 
-
-class DonationFormView(FormView):
+class DonationFormView(LoginRequiredMixin,FormView):
     template_name = 'donationApp/donate_form.html'
     form_class = DonorDetailsForm
-    success_url = '/thanks/'#home in future
+    success_url = '/thanks'#reverse('thanks')#home in future
+    login_url = '/login'#reverse('login')
+
     def get_form_kwargs(self):
         logger.info('called get form kwargs')
         kwargs=super(DonationFormView,self).get_form_kwargs()

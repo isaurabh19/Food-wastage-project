@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<a href="{% url 'login' %}">Login</a>
+{% if user.is_authenticated %}
+    <h1>Welcome, {{ user.name }}</h1>
+{% endif %}
+<form action="{% url 'donate' %}">
+    <p>Go to donation</p>
+    <input type="submit" value="Donate">
+</form>
+
+<form action="{% url 'list-donations' %}">
+    <p>View live donations</p>
+    <input type="submit" value="Live Donations">
+</form>
+
+
+</body>
+</html>
