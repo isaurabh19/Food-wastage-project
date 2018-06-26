@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-
+from django.urls import reverse
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -102,8 +102,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 #EMAIL
-DEFAULT_FROM_EMAIL= 'foodforall@gmail.com'
-
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'saveourfoodfoundation@gmail.com'
+EMAIL_HOST_PASSWORD = 'Avoidfoodwastage@24/7'
+EMAIL_USE_TLS = True
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -117,7 +120,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL='donate'
+LOGIN_REDIRECT_URL = '/'#reverse('donate')
+LOGOUT_REDIRECT_URL = '/login'#reverse('login')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
